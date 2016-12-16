@@ -11,6 +11,7 @@ S Kailasa
 
 
 from ctypes import *
+import time
 
 DLL_DIRECTORY =  "C:\Users\wjjw53\TobiiEyeXSdk\lib\practice"
 eyex_dll = CDLL(DLL_DIRECTORY + "/Tobii.EyeX.Client.dll")
@@ -40,3 +41,30 @@ def move_to_position():
 def activate_position():
     tracker_dll.activate()
 
+
+
+def track(exp_time):
+    """
+    function to call the EyeX API and record gaze for a specified experimental time
+
+    inputs:
+    -------
+    exp_time    :    experiment time in seconds (float)
+
+    outputs:
+    --------
+    gaze
+
+    """
+    g_data = []
+    start = time.time()   
+    elapsed = 0
+    connect()
+    while elapsed < exp_time:
+        elapsed = time.time() - start
+        time.sleep(1)
+        g_data.append(print_position())
+    disconnect()
+    return g_data
+
+print len(track(10))
